@@ -3,158 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lamsal Kirana Stores | Premium Auth</title>
+    <title>Lamsal Kirana | Unified Auth API</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; background: #0f172a; }
-        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .input-dark { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; }
-        .input-dark:focus { border-color: #10b981; outline: none; ring: 2px #10b981; }
-        .btn-gradient { background: linear-gradient(135deg, #10b981 0%, #059669 100%); transition: all 0.3s ease; }
-        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -10px #10b981; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #070a13; color: white; overflow-x: hidden; }
+        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        .admin-gradient { background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%); }
+        .loader { border-top-color: #10b981; animation: spinner 0.6s linear infinite; }
+        @keyframes spinner { to { transform: rotate(360deg); } }
+        .hidden { display: none; }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4 text-white">
+<body class="min-h-screen flex items-center justify-center p-4">
 
-    <div class="glass-card w-full max-w-md p-10 rounded-[2.5rem] shadow-2xl">
-        <!-- Logo -->
+    <!-- LOGIN INTERFACE -->
+    <div id="authContainer" class="glass w-full max-w-md p-10 rounded-[2.5rem] shadow-2xl relative z-10">
         <div class="text-center mb-10">
-            <div class="inline-flex items-center justify-center w-20 h-20 bg-emerald-500/20 rounded-full mb-4">
-                <i class="fas fa-shopping-basket text-emerald-500 text-3xl"></i>
+            <div class="w-20 h-20 bg-emerald-500/20 rounded-3xl flex items-center justify-center mx-auto mb-4 border border-emerald-500/30">
+                <i class="fas fa-key text-emerald-400 text-3xl"></i>
             </div>
-            <h1 class="text-3xl font-extrabold tracking-tight">Lamsal Kirana</h1>
-            <p class="text-gray-400 text-sm mt-2">Sign in to your account</p>
+            <h1 class="text-3xl font-extrabold tracking-tight">Lamsal Auth</h1>
+            <p class="text-gray-400 text-sm mt-2">Sign in to access ecosystem</p>
         </div>
 
-        <!-- Notification -->
-        <div id="statusBox" class="hidden mb-6 p-4 rounded-2xl text-sm text-center"></div>
-
-        <!-- Form -->
-        <form id="loginForm" class="space-y-6">
-            <div>
-                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 ml-1">Username / Mobile / Email</label>
-                <input type="text" id="identifier" required 
-                    class="input-dark w-full px-5 py-4 rounded-2xl transition-all" 
-                    placeholder="Enter details...">
+        <form id="loginForm" class="space-y-5">
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-gray-400 uppercase ml-1">Username / Mobile / Email</label>
+                <div class="relative">
+                    <i class="fas fa-user absolute left-4 top-4 text-gray-500"></i>
+                    <input type="text" id="identifier" class="w-full bg-white/5 border border-white/10 pl-12 pr-4 py-4 rounded-2xl focus:border-emerald-500 outline-none transition-all" placeholder="Enter details..." required>
+                </div>
             </div>
 
-            <div>
-                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 ml-1">Password</label>
-                <input type="password" id="password" required 
-                    class="input-dark w-full px-5 py-4 rounded-2xl transition-all" 
-                    placeholder="••••••••">
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-gray-400 uppercase ml-1">Password</label>
+                <div class="relative">
+                    <i class="fas fa-lock absolute left-4 top-4 text-gray-500"></i>
+                    <input type="password" id="password" class="w-full bg-white/5 border border-white/10 pl-12 pr-4 py-4 rounded-2xl focus:border-emerald-500 outline-none transition-all" placeholder="••••••••" required>
+                </div>
             </div>
 
-            <div class="flex justify-end">
-                <button type="button" onclick="handleForgot()" class="text-xs font-medium text-emerald-400 hover:text-emerald-300">
-                    Forgot password?
-                </button>
-            </div>
-
-            <button type="submit" id="loginBtn" class="btn-gradient w-full py-4 rounded-2xl font-bold text-lg">
-                Sign In
+            <button type="submit" id="loginBtn" class="w-full admin-gradient py-4 rounded-2xl font-bold text-lg hover:opacity-90 transform active:scale-95 transition-all">
+                Login to Account
             </button>
         </form>
 
-        <!-- Divider -->
-        <div class="relative my-8">
-            <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/10"></div></div>
-            <div class="relative flex justify-center text-xs uppercase"><span class="bg-[#161e2f] px-4 text-gray-500 font-bold">Or continue with</span></div>
+        <div class="relative my-8 flex items-center">
+            <div class="flex-grow border-t border-white/10"></div>
+            <span class="px-4 text-xs text-gray-500 font-bold uppercase tracking-widest">Or login with</span>
+            <div class="flex-grow border-t border-white/10"></div>
         </div>
 
-        <!-- Google Login -->
-        <button id="googleBtn" class="w-full bg-white text-gray-900 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-gray-100 transition-all active:scale-95">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="20" alt="Google">
-            Login with Google
+        <button id="googleBtn" class="w-full bg-white text-black py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-gray-200 transition-all">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="20">
+            Sign in with Google
         </button>
-
-        <p class="text-center text-gray-500 text-xs mt-10">
-            &copy; 2024 Lamsal Kirana Stores. All rights reserved.
-        </p>
     </div>
 
-    <!-- Script -->
+    <!-- ADMIN CONSOLE (Hidden by Default) -->
+    <div id="adminConsole" class="hidden w-full max-w-5xl">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-4xl font-black">Admin Console</h1>
+                <p class="text-emerald-400 font-bold uppercase text-xs tracking-widest mt-1">Lamsal Kirana Stores Master Account</p>
+            </div>
+            <button onclick="logout()" class="bg-red-500/20 text-red-500 border border-red-500/30 px-6 py-2 rounded-xl hover:bg-red-500 hover:text-white transition-all">Logout</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- API Generator -->
+            <div class="glass p-8 rounded-[2rem] col-span-2">
+                <h3 class="text-xl font-bold mb-6 flex items-center gap-3">
+                    <i class="fas fa-code text-emerald-500"></i> Build Auth API Link
+                </h3>
+                <div class="space-y-4">
+                    <input type="text" id="appName" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none" placeholder="App Name (e.g. Billing App)">
+                    <input type="text" id="redUrl" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none" placeholder="Redirect URL (https://...)">
+                    <button onclick="generateAPI()" class="bg-emerald-500 w-full py-4 rounded-xl font-bold">Generate API Link</button>
+                    
+                    <div id="resultBox" class="hidden mt-4 p-4 bg-black/50 border border-emerald-500/30 rounded-xl">
+                        <p class="text-xs text-emerald-400 mb-2 uppercase font-bold tracking-tighter">Copy your API URL:</p>
+                        <code id="apiUrlDisplay" class="text-sm break-all text-gray-300"></code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Info -->
+            <div class="glass p-8 rounded-[2rem]">
+                <h3 class="text-xl font-bold mb-6">Admin Profile</h3>
+                <div class="text-center">
+                    <div id="adminAvatar" class="w-20 h-20 bg-emerald-500 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl font-bold">L</div>
+                    <p id="adminEmail" class="text-gray-400 mb-2">...</p>
+                    <div class="inline-block bg-emerald-500/20 text-emerald-400 px-4 py-1 rounded-full text-xs font-bold border border-emerald-500/30">Verified Admin</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { 
-            getAuth, 
-            signInWithEmailAndPassword, 
-            sendPasswordResetEmail,
-            GoogleAuthProvider,
-            signInWithPopup 
-        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // Your Config
         const firebaseConfig = {
             apiKey: "AIzaSyBGOtzwfGhDOIEpcUtc-m7TIU9KLP6L100",
             authDomain: "lamsalauth.firebaseapp.com",
             projectId: "lamsalauth",
             storageBucket: "lamsalauth.firebasestorage.app",
             messagingSenderId: "1087666109571",
-            appId: "1:1087666109571:web:5ea70c7add916cb6e5afb6",
-            measurementId: "G-6G5QV8JX6K"
+            appId: "1:1087666109571:web:5ea70c7add916cb6e5afb6"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
+        const ADMIN_UID = "Y7UwOutkLEYGFirc7NQnKD5pUdQ2";
 
-        const statusBox = document.getElementById('statusBox');
-        const getRedirect = () => new URLSearchParams(window.location.search).get('redirect') || '#';
+        const getParam = (name) => new URLSearchParams(window.location.search).get(name);
 
-        const showMsg = (msg, err = true) => {
-            statusBox.innerText = msg;
-            statusBox.className = `p-4 rounded-2xl text-sm text-center mb-6 ${err ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50'}`;
-            statusBox.classList.remove('hidden');
+        // AUTH STATE OBSERVER
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                if (user.uid === ADMIN_UID) {
+                    showAdminConsole(user);
+                } else {
+                    handleUserRedirect();
+                }
+            } else {
+                document.getElementById('authContainer').classList.remove('hidden');
+                document.getElementById('adminConsole').classList.add('hidden');
+            }
+        });
+
+        const showAdminConsole = (user) => {
+            document.getElementById('authContainer').classList.add('hidden');
+            document.getElementById('adminConsole').classList.remove('hidden');
+            document.getElementById('adminEmail').innerText = user.email;
+            document.getElementById('adminAvatar').innerText = user.email.charAt(0).toUpperCase();
         };
 
-        // Email/Password Login
+        const handleUserRedirect = () => {
+            const redirect = getParam('redirect');
+            if (redirect) {
+                Swal.fire({ title: 'Access Granted', text: 'Redirecting to application...', icon: 'success', showConfirmButton: false, timer: 1500, background: '#0f172a', color: '#fff' });
+                setTimeout(() => window.location.href = redirect, 1600);
+            } else {
+                Swal.fire({ title: 'Logged In', text: 'No redirect URL found. Contact Admin.', icon: 'info', background: '#0f172a', color: '#fff' });
+            }
+        };
+
+        // LOGIN ACTIONS
         document.getElementById('loginForm').onsubmit = async (e) => {
             e.preventDefault();
             const id = document.getElementById('identifier').value;
             const pass = document.getElementById('password').value;
-            const btn = document.getElementById('loginBtn');
-            
-            btn.innerText = "Authenticating...";
-            btn.disabled = true;
-
-            // Simple logic for Username/Mobile
-            let email = id.includes('@') ? id : `${id}@lamsal.com`;
+            const email = id.includes('@') ? id : `${id}@lamsal.com`;
 
             try {
                 await signInWithEmailAndPassword(auth, email, pass);
-                showMsg("Login Success! Redirecting...", false);
-                setTimeout(() => window.location.href = getRedirect(), 1500);
-            } catch (error) {
-                showMsg("Login Failed: " + error.message);
-                btn.innerText = "Sign In";
-                btn.disabled = false;
+            } catch (err) {
+                Swal.fire('Error', 'Invalid credentials or user does not exist.', 'error');
             }
         };
 
-        // Google Login logic
         document.getElementById('googleBtn').onclick = async () => {
-            try {
-                const result = await signInWithPopup(auth, provider);
-                showMsg("Google Login Success!", false);
-                setTimeout(() => window.location.href = getRedirect(), 1000);
-            } catch (error) {
-                showMsg("Google Error: " + error.message);
-            }
+            try { await signInWithPopup(auth, provider); } 
+            catch (err) { Swal.fire('Error', err.message, 'error'); }
         };
 
-        // Forgot Password logic
-        window.handleForgot = async () => {
-            const id = document.getElementById('identifier').value;
-            if(!id) return showMsg("Enter your email/username first");
-            let email = id.includes('@') ? id : `${id}@lamsal.com`;
-            try {
-                await sendPasswordResetEmail(auth, email);
-                showMsg("Reset link sent to email!", false);
-            } catch (e) { showMsg(e.message); }
+        window.logout = () => signOut(auth);
+
+        // API GENERATOR LOGIC
+        window.generateAPI = () => {
+            const url = document.getElementById('redUrl').value;
+            const app = document.getElementById('appName').value;
+            if(!url) return alert("Please enter a redirect URL");
+            
+            const currentUrl = window.location.href.split('?')[0];
+            const finalApi = `${currentUrl}?app=${encodeURIComponent(app)}&redirect=${encodeURIComponent(url)}`;
+            
+            document.getElementById('resultBox').classList.remove('hidden');
+            document.getElementById('apiUrlDisplay').innerText = finalApi;
         };
+
     </script>
 </body>
 </html>
