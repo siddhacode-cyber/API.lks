@@ -3,243 +3,221 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lamsal Auth | Premium Unified API</title>
+    <title>Lamsal Auth | Premium Unified Identity</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         
         :root {
             --primary: #10b981;
-            --bg-dark: #05070a;
-            --glass: rgba(15, 23, 42, 0.7);
+            --primary-dark: #059669;
+            --bg-dark: #020617;
+            --glass: rgba(15, 23, 42, 0.6);
         }
 
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: radial-gradient(circle at top right, #0d2e26, #05070a); 
-            color: white; 
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at 0% 0%, #064e3b 0%, #020617 50%),
+                        radial-gradient(circle at 100% 100%, #111827 0%, #020617 100%);
+            color: white;
             min-height: 100vh;
-            overflow-x: hidden; 
+            overflow-x: hidden;
         }
 
-        .glass-card { 
-            background: var(--glass); 
-            backdrop-filter: blur(16px); 
-            border: 1px solid rgba(255,255,255,0.08);
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
         .input-field {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .input-field:focus {
             border-color: var(--primary);
             background: rgba(16, 185, 129, 0.05);
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
+            outline: none;
         }
 
         .btn-premium {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .btn-premium:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
-        }
-
-        .shimmer {
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
-        .shimmer::after {
-            content: "";
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
-            transform: rotate(45deg);
-            animation: shimmer 3s infinite;
+        .btn-premium:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4);
+            filter: brightness(1.1);
         }
 
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
+        .google-btn {
+            background: white;
+            color: #1f2937;
+            transition: all 0.3s ease;
+        }
+
+        .google-btn:hover {
+            background: #f3f4f6;
+            transform: translateY(-1px);
         }
 
         .hidden { display: none; }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade { animation: fadeIn 0.6s ease forwards; }
     </style>
 </head>
 <body class="flex items-center justify-center p-4">
 
     <!-- AUTH CONTAINER -->
-    <div id="authBox" class="w-full max-w-md">
-        <div class="glass-card rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden">
-            <!-- Header -->
-            <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-emerald-500/20">
-                    <i class="fas fa-shield-halved text-emerald-400 text-2xl"></i>
-                </div>
-                <h1 id="authTitle" class="text-2xl font-extrabold tracking-tight">Welcome Back</h1>
-                <p id="authSub" class="text-gray-400 text-sm mt-1">Lamsal Unified Authentication</p>
+    <div id="authBox" class="w-full max-w-md animate-fade">
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 mb-4">
+                <i class="fas fa-shield-halved text-emerald-500 text-3xl"></i>
             </div>
+            <h1 id="authTitle" class="text-3xl font-extrabold tracking-tight">Lamsal <span class="text-emerald-500">Auth</span></h1>
+            <p class="text-gray-400 text-sm mt-2">Professional Unified Identity Gateway</p>
+        </div>
 
-            <!-- Login Form -->
+        <div class="glass-card rounded-[2.5rem] p-8 md:p-10">
             <form id="loginForm" class="space-y-4">
-                <div id="regFields" class="hidden space-y-4 mb-4">
+                <div id="regFields" class="hidden space-y-4">
                     <div class="relative">
-                        <i class="fas fa-user-tag absolute left-4 top-4 text-gray-500 text-sm"></i>
-                        <input type="text" id="regName" class="input-field w-full pl-12 pr-4 py-4 rounded-2xl outline-none text-sm" placeholder="Full Name">
+                        <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                        <input type="text" id="regName" class="input-field w-full pl-12 pr-4 py-4 rounded-2xl" placeholder="Full Name">
                     </div>
-                    <div class="relative">
-                        <i class="fas fa-phone absolute left-4 top-4 text-gray-500 text-sm"></i>
-                        <input type="text" id="regPhone" class="input-field w-full pl-12 pr-4 py-4 rounded-2xl outline-none text-sm" placeholder="Mobile Number">
-                    </div>
+                </div>
+                
+                <div class="relative">
+                    <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="email" id="email" class="input-field w-full pl-12 pr-4 py-4 rounded-2xl" placeholder="Email Address" required>
                 </div>
 
                 <div class="relative">
-                    <i class="fas fa-envelope absolute left-4 top-4 text-gray-500 text-sm"></i>
-                    <input type="text" id="email" class="input-field w-full pl-12 pr-4 py-4 rounded-2xl outline-none text-sm" placeholder="Email or Username" required>
-                </div>
-
-                <div class="relative">
-                    <i class="fas fa-lock absolute left-4 top-4 text-gray-500 text-sm"></i>
-                    <input type="password" id="password" class="input-field w-full pl-12 pr-4 py-4 rounded-2xl outline-none text-sm" placeholder="Password" required>
+                    <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="password" id="password" class="input-field w-full pl-12 pr-4 py-4 rounded-2xl" placeholder="Password" required>
                 </div>
 
                 <button type="submit" id="mainBtn" class="btn-premium w-full py-4 rounded-2xl font-bold text-white mt-2">
-                    Login Access
+                    Continue Access
                 </button>
             </form>
 
-            <div class="flex items-center my-6">
-                <div class="flex-grow border-t border-white/5"></div>
-                <span class="px-4 text-[10px] text-gray-500 font-bold uppercase tracking-widest">Secure Connect</span>
-                <div class="flex-grow border-t border-white/5"></div>
+            <div class="relative my-8 text-center">
+                <hr class="border-gray-800">
+                <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#0d1424] px-4 text-xs text-gray-500 font-bold uppercase tracking-widest">OR</span>
             </div>
 
-            <!-- Google Login -->
-            <button id="googleBtn" class="w-full bg-white text-black py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-gray-100 transition-all text-sm mb-6">
-                <img src="https://static.vecteezy.com/system/resources/previews/012/871/371/non_2x/google-search-icon-google-product-illustration-free-png.png" width="22">
-                Continue with Google
+            <button onclick="loginWithGoogle()" class="google-btn w-full py-4 rounded-2xl font-bold flex items-center justify-center gap-3">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" class="w-5" alt="Google">
+                Sign in with Google
             </button>
 
-            <!-- Toggle Register -->
-            <div class="text-center">
-                <button id="toggleAuth" class="text-emerald-400 text-xs font-bold hover:underline">
-                    New User? Create Account
-                </button>
-            </div>
+            <button id="toggleAuth" class="mt-8 text-emerald-400 text-sm font-semibold w-full text-center hover:text-emerald-300 transition-colors">
+                New to Lamsal? Create an account
+            </button>
         </div>
     </div>
 
-    <!-- ADMIN DASHBOARD -->
-    <div id="adminConsole" class="hidden w-full max-w-6xl">
-        <!-- Top Bar -->
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+    <!-- ADMIN CONSOLE -->
+    <div id="adminConsole" class="hidden w-full max-w-6xl animate-fade">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
             <div>
-                <h2 class="text-3xl font-black text-white">Console<span class="text-emerald-500">.</span></h2>
-                <p class="text-gray-400 text-xs font-bold tracking-[0.2em] uppercase">Ecosystem Management Dashboard</p>
+                <h2 class="text-4xl font-black italic tracking-tighter">CONSOLE<span class="text-emerald-500">.</span></h2>
+                <p class="text-gray-400 text-sm">Managing Lamsal Kirana Stores Network</p>
             </div>
             <div class="flex items-center gap-4">
                 <div class="text-right hidden md:block">
-                    <p id="adminName" class="text-sm font-bold">Admin</p>
-                    <p id="adminMail" class="text-[10px] text-gray-500">admin@lamsal.com</p>
+                    <p id="userName" class="font-bold text-sm">Loading...</p>
+                    <p id="userEmail" class="text-xs text-emerald-500">Connecting...</p>
                 </div>
-                <button onclick="logout()" class="bg-red-500/10 text-red-500 border border-red-500/20 px-5 py-2 rounded-xl text-xs font-bold hover:bg-red-500 hover:text-white transition-all">
-                    Sign Out
+                <button onclick="logout()" class="bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white px-6 py-3 rounded-2xl border border-red-500/20 transition-all font-bold">
+                    <i class="fas fa-power-off mr-2"></i> Sign Out
                 </button>
             </div>
         </div>
 
-        <!-- Stats Row -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="glass-card p-6 rounded-3xl border-l-4 border-emerald-500">
-                <p class="text-gray-400 text-xs font-bold uppercase">Total Users</p>
-                <h3 id="userCount" class="text-3xl font-black mt-1">0</h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+            <div class="glass-card p-6 rounded-3xl relative overflow-hidden group">
+                <div class="absolute -right-4 -bottom-4 text-white/5 text-6xl group-hover:scale-110 transition-transform"><i class="fas fa-users"></i></div>
+                <p class="text-emerald-400 text-xs font-black tracking-widest uppercase">Ecosystem Users</p>
+                <h3 id="userCount" class="text-4xl font-black mt-2">...</h3>
             </div>
-            <div class="glass-card p-6 rounded-3xl border-l-4 border-blue-500">
-                <p class="text-gray-400 text-xs font-bold uppercase">Connected Apps</p>
-                <h3 id="appCount" class="text-3xl font-black mt-1">12</h3>
+            <div class="glass-card p-6 rounded-3xl relative overflow-hidden group">
+                <div class="absolute -right-4 -bottom-4 text-white/5 text-6xl group-hover:scale-110 transition-transform"><i class="fas fa-rocket"></i></div>
+                <p class="text-blue-400 text-xs font-black tracking-widest uppercase">Live Endpoints</p>
+                <h3 id="appCount" class="text-4xl font-black mt-2">0</h3>
             </div>
-            <div class="glass-card p-6 rounded-3xl border-l-4 border-purple-500">
-                <p class="text-gray-400 text-xs font-bold uppercase">API Calls</p>
-                <h3 class="text-3xl font-black mt-1">2.4k</h3>
+            <div class="glass-card p-6 rounded-3xl relative overflow-hidden group">
+                <div class="absolute -right-4 -bottom-4 text-white/5 text-6xl group-hover:scale-110 transition-transform"><i class="fas fa-globe"></i></div>
+                <p class="text-purple-400 text-xs font-black tracking-widest uppercase">Server Latency</p>
+                <h3 class="text-4xl font-black mt-2">14<span class="text-lg">ms</span></h3>
             </div>
-            <div class="glass-card p-6 rounded-3xl border-l-4 border-orange-500">
-                <p class="text-gray-400 text-xs font-bold uppercase">Security Status</p>
-                <h3 class="text-xl font-black mt-1 text-emerald-400">ACTIVE</h3>
+            <div class="glass-card p-6 rounded-3xl flex items-center justify-center border-emerald-500/30">
+                <div class="text-center">
+                    <div class="flex items-center justify-center gap-2 mb-1">
+                        <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                        <span class="text-emerald-500 font-bold text-sm">SYSTEM ONLINE</span>
+                    </div>
+                    <p class="text-[10px] text-gray-500 uppercase font-black">Cluster: South-Asia-1</p>
+                </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- API Manager -->
-            <div class="lg:col-span-2 glass-card p-8 rounded-[2.5rem]">
-                <h4 class="text-lg font-bold mb-6 flex items-center gap-2">
-                    <i class="fas fa-layer-group text-emerald-500"></i>
-                    API & Redirect Manager
-                </h4>
-                <div class="space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input type="text" id="appName" class="input-field p-4 rounded-xl outline-none text-sm" placeholder="Application Name">
-                        <input type="text" id="redUrl" class="input-field p-4 rounded-xl outline-none text-sm" placeholder="Endpoint URL (https://...)">
-                    </div>
-                    <button onclick="generateAPI()" class="btn-premium w-full py-4 rounded-xl font-bold uppercase tracking-wider text-xs">
-                        Generate Managed Auth Link
-                    </button>
-                    
-                    <div id="resultBox" class="hidden mt-6 p-5 bg-emerald-500/5 border border-emerald-500/20 rounded-2xl animate-pulse">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-[10px] text-emerald-400 font-black uppercase">Production API URL</span>
-                            <i class="fas fa-copy text-emerald-400 cursor-pointer" onclick="copyApi()"></i>
-                        </div>
-                        <code id="apiUrlDisplay" class="text-xs break-all text-gray-300 font-mono"></code>
-                    </div>
+        <div class="glass-card p-8 md:p-12 rounded-[3rem]">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-500">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <h4 class="text-2xl font-bold">Register Production App</h4>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-gray-400 uppercase ml-2">App Display Name</label>
+                    <input type="text" id="appName" class="input-field w-full p-5 rounded-2xl" placeholder="e.g. Lamsal Kirana Mobile">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-gray-400 uppercase ml-2">Redirect Redirect URI</label>
+                    <input type="text" id="redUrl" class="input-field w-full p-5 rounded-2xl" placeholder="https://app.lamsalkirana.com/auth">
                 </div>
             </div>
-
-            <!-- Profile / System -->
-            <div class="glass-card p-8 rounded-[2.5rem]">
-                <h4 class="text-lg font-bold mb-6">System Health</h4>
-                <div class="space-y-6">
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-400">Backend Auth</span>
-                        <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded">Online</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-400">Database Sync</span>
-                        <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded">Stable</span>
-                    </div>
-                    <div class="pt-4 border-t border-white/5">
-                        <p class="text-[10px] text-gray-500 uppercase font-bold mb-4">Admin Identity</p>
-                        <div class="flex items-center gap-4">
-                            <div id="adminAvatar" class="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center font-bold text-xl">L</div>
-                            <div>
-                                <p class="text-sm font-bold">Main Root</p>
-                                <p class="text-[10px] text-emerald-500">Super Administrator</p>
-                            </div>
-                        </div>
-                    </div>
+            
+            <button onclick="generateAPI()" class="btn-premium w-full py-5 rounded-2xl font-black text-lg tracking-wide uppercase">
+                Deploy API Configuration
+            </button>
+            
+            <div id="resultBox" class="hidden mt-10 p-8 bg-black/40 border border-emerald-500/30 rounded-[2rem] animate-fade">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-xs font-black text-emerald-400 tracking-[0.2em]">GENERATED PRODUCTION LINK</span>
+                    <button onclick="copyLink()" class="text-emerald-500 text-xs font-bold hover:underline">COPY LINK</button>
                 </div>
+                <code id="apiUrlDisplay" class="text-sm break-all text-gray-400 font-mono"></code>
             </div>
         </div>
     </div>
 
     <script type="module">
-        // --- FIREBASE INTEGRATION ---
+        // [IMPORTANT: Update this with your actual Firebase config from console]
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, collection, onSnapshot, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Replace with your actual Firebase config
         const firebaseConfig = {
-            apiKey: "AIzaSyBGOtzwfGhDOIEpcUtc-m7TIU9KLP6L100",
+            apiKey: "YOUR_API_KEY",
             authDomain: "lamsalauth.firebaseapp.com",
             projectId: "lamsalauth",
             storageBucket: "lamsalauth.firebasestorage.app",
@@ -252,117 +230,111 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        const ADMIN_UID = "Y7UwOutkLEYGFirc7NQnKD5pUdQ2"; // Your UID
         let isRegisterMode = false;
 
-        // Toggle UI
-        document.getElementById('toggleAuth').onclick = () => {
+        // Toggler
+        const toggleBtn = document.getElementById('toggleAuth');
+        toggleBtn.onclick = () => {
             isRegisterMode = !isRegisterMode;
-            document.getElementById('authTitle').innerText = isRegisterMode ? "Create Account" : "Welcome Back";
-            document.getElementById('mainBtn').innerText = isRegisterMode ? "Register Now" : "Login Access";
-            document.getElementById('toggleAuth').innerText = isRegisterMode ? "Already have account? Login" : "New User? Create Account";
+            document.getElementById('authTitle').innerHTML = isRegisterMode ? 'Create <span class="text-emerald-500">Account</span>' : 'Lamsal <span class="text-emerald-500">Auth</span>';
             document.getElementById('regFields').classList.toggle('hidden');
+            document.getElementById('mainBtn').innerText = isRegisterMode ? "Create Admin ID" : "Continue Access";
+            toggleBtn.innerText = isRegisterMode ? "Already have access? Login" : "New to Lamsal? Create an account";
         };
 
-        // Auth Logic
+        // Email/Pass Login
         document.getElementById('loginForm').onsubmit = async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const pass = document.getElementById('password').value;
             const name = document.getElementById('regName').value;
-            const phone = document.getElementById('regPhone').value;
 
             try {
                 if (isRegisterMode) {
                     const res = await createUserWithEmailAndPassword(auth, email, pass);
-                    // Save additional data to Firestore
-                    await setDoc(doc(db, "users", res.user.uid), {
-                        name: name,
-                        phone: phone,
-                        email: email,
-                        role: "user",
-                        createdAt: new Date()
-                    });
-                    Swal.fire('Success', 'Account Created!', 'success');
+                    await setDoc(doc(db, "users", res.user.uid), { name, email, createdAt: new Date() });
+                    Swal.fire('Success', 'Admin Account Created', 'success');
                 } else {
                     await signInWithEmailAndPassword(auth, email, pass);
                 }
             } catch (err) {
-                Swal.fire('Error', err.message, 'error');
+                Swal.fire('Authentication Failed', err.message, 'error');
             }
         };
 
-        // Google Login
-        document.getElementById('googleBtn').onclick = async () => {
+        // Google Login Logic
+        window.loginWithGoogle = async () => {
             try {
-                const res = await signInWithPopup(auth, provider);
-                // Save google user if new
-                await setDoc(doc(db, "users", res.user.uid), {
-                    name: res.user.displayName,
-                    email: res.user.email,
-                    role: "user"
+                const result = await signInWithPopup(auth, provider);
+                await setDoc(doc(db, "users", result.user.uid), {
+                    name: result.user.displayName,
+                    email: result.user.email,
+                    photo: result.user.photoURL,
+                    lastLogin: new Date()
                 }, { merge: true });
-            } catch (err) {
-                Swal.fire('Auth Error', err.message, 'error');
+            } catch (error) {
+                Swal.fire('Google Auth Error', error.message, 'error');
             }
         };
 
-        // Observer
-        onAuthStateChanged(auth, async (user) => {
+        // State Listener
+        onAuthStateChanged(auth, (user) => {
             if (user) {
-                if (user.uid === ADMIN_UID) {
-                    showAdmin(user);
-                } else {
-                    handleRedirect(user);
-                }
+                document.getElementById('authBox').classList.add('hidden');
+                document.getElementById('adminConsole').classList.remove('hidden');
+                document.getElementById('userName').innerText = user.displayName || "Admin User";
+                document.getElementById('userEmail').innerText = user.email;
+                
+                // Real-time Dashboard Data
+                onSnapshot(collection(db, "users"), (snap) => {
+                    document.getElementById('userCount').innerText = snap.size.toLocaleString();
+                });
+
+                onSnapshot(collection(db, "apps"), (snap) => {
+                    document.getElementById('appCount').innerText = snap.size;
+                });
             } else {
                 document.getElementById('authBox').classList.remove('hidden');
                 document.getElementById('adminConsole').classList.add('hidden');
             }
         });
 
-        async function showAdmin(user) {
-            document.getElementById('authBox').classList.add('hidden');
-            document.getElementById('adminConsole').classList.remove('hidden');
-            document.getElementById('adminMail').innerText = user.email;
-            
-            // Fetch total users from Firestore
-            const querySnapshot = await getDocs(collection(db, "users"));
-            document.getElementById('userCount').innerText = querySnapshot.size;
-        }
-
-        function handleRedirect(user) {
-            const urlParams = new URLSearchParams(window.location.search);
-            const redirect = urlParams.get('redirect');
-            if (redirect) {
-                Swal.fire({ title: 'Authorized', text: 'Redirecting...', icon: 'success', showConfirmButton: false, timer: 2000 });
-                setTimeout(() => window.location.href = `${redirect}?uid=${user.uid}&token=${user.accessToken}`, 2100);
-            } else {
-                Swal.fire('Logged In', 'No redirect specified. You are now in the ecosystem.', 'info');
-            }
-        }
-
-        window.logout = () => signOut(auth);
-
-        // API Gen Logic
-        window.generateAPI = () => {
+        // Generate and Save App Endpoint
+        window.generateAPI = async () => {
             const name = document.getElementById('appName').value;
             const url = document.getElementById('redUrl').value;
-            if(!url || !name) return Swal.fire('Error', 'Fill all fields', 'warning');
-
-            const baseUrl = window.location.origin + window.location.pathname;
-            const final = `${baseUrl}?app=${encodeURIComponent(name)}&redirect=${encodeURIComponent(url)}`;
             
-            document.getElementById('resultBox').classList.remove('hidden');
-            document.getElementById('apiUrlDisplay').innerText = final;
+            if(!name || !url) return Swal.fire('Wait!', 'Please fill all production details', 'warning');
+
+            Swal.fire({ title: 'Deploying...', didOpen: () => Swal.showLoading() });
+
+            try {
+                await addDoc(collection(db, "apps"), {
+                    appName: name,
+                    redirectUrl: url,
+                    creator: auth.currentUser.email,
+                    createdAt: new Date()
+                });
+
+                const customBase = "https://auth.lamsalkiranastores.com.np";
+                const finalLink = `${customBase}?app_id=${btoa(name)}&redirect=${encodeURIComponent(url)}`;
+                
+                document.getElementById('resultBox').classList.remove('hidden');
+                document.getElementById('apiUrlDisplay').innerText = finalLink;
+                
+                Swal.fire('Deployed!', 'Your endpoint is now live on the unified network.', 'success');
+            } catch (e) {
+                Swal.fire('Deployment Failed', e.message, 'error');
+            }
         };
 
-        window.copyApi = () => {
-            const text = document.getElementById('apiUrlDisplay').innerText;
-            navigator.clipboard.writeText(text);
-            Swal.fire({ title: 'Copied!', toast: true, position: 'top-end', timer: 2000, showConfirmButton: false, icon: 'success' });
-        }
+        window.copyLink = () => {
+            const link = document.getElementById('apiUrlDisplay').innerText;
+            navigator.clipboard.writeText(link);
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Link copied to clipboard', showConfirmButton: false, timer: 2000 });
+        };
 
+        window.logout = () => signOut(auth);
     </script>
 </body>
 </html>
